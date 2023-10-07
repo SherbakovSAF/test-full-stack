@@ -1,19 +1,15 @@
 <script lang="ts">
 import CheckedIcon from './icons/CheckedIcon.vue';
 import ChevronIcon from './icons/ChevronIcon.vue'
-import {defineComponent, ref } from 'vue'
+import {defineComponent, ref, onMounted } from 'vue'
 import type {Ref} from 'vue'
 
-interface TypeOption{
-  id: number;
-  title: string,
-  url: string | null
-}
+import { TypeOption } from '@/interfaces'
 
 export default defineComponent({
   components: {CheckedIcon, ChevronIcon},
-  setup() {
-    
+  
+  setup(props, {emit}) {
     const types: Ref<TypeOption[]> = ref([
     { id: 0, title: 'Не выбрано', url: null},
     { id: 1, title: 'Сделка', url: 'leads'},
@@ -22,9 +18,24 @@ export default defineComponent({
     ]);
     const currentType: Ref<TypeOption> = ref(types.value[0])
 
+    function emitChangeSelectType():void{
+      emit('changeSelectType', currentType.value)
+    }
+
+    function switchTypeSelect(type: TypeOption):void{
+      if(currentType.value == type) return
+      currentType.value = type;
+      emitChangeSelectType()
+    }
+
+    onMounted(()=> {
+      emitChangeSelectType()
+    })
+    
   return {
       currentType,
-      types
+      types,
+      switchTypeSelect
     }
 }
 })
@@ -42,7 +53,7 @@ export default defineComponent({
     </label>
     <ul id="drop-down">
       <li v-for="(type) in types" :key="type.id" 
-        @click="currentType = type">
+        @click="switchTypeSelect(type)">
 
         <CheckedIcon v-show="currentType.id == type.id" hex-color="grey"/>
         <p>{{type.title}}</p>
