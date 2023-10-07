@@ -1,14 +1,31 @@
-<script setup lang="ts">
-import DropDown from './components/DropDown.vue';
-import SubmitBtn from './components/SubmitBtn.vue';
+<script lang="ts">
+import DropDown from '@/components/DropDown.vue';
+import SubmitBtn from '@/components/SubmitBtn.vue';
+
+import { defineComponent, ref, } from 'vue';
+
+import { TypeOption } from '@/interfaces';
+
+export default defineComponent({
+  components: {DropDown, SubmitBtn},
+  setup(){
+    const typeSelect = ref({});
+    function changeSelectType(e: TypeOption){
+      typeSelect.value = e
+    }
+
+    return {typeSelect, changeSelectType}
+  }
+})
+
 </script>
 
 <template>
   <div id="app">
     <div id="input-panel">
-    <DropDown />
-    <SubmitBtn />
-  </div>
+      <DropDown @changeSelectType="changeSelectType"/>
+      <SubmitBtn :sendPostType="typeSelect"/>
+    </div>
   </div>
   
 </template>
