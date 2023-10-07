@@ -55,6 +55,7 @@ export default defineComponent({
 <style scoped>
 #select{
   width: 400px;
+  position: relative;
 }
 
 #select:has(#select-toggle:checked) > #drop-down{
@@ -80,8 +81,11 @@ export default defineComponent({
 }
 
 #drop-down {
+  position: absolute;
+  top: calc(100% + 20px);
+  left: 0;
+  z-index: 1;
   border-radius: 5px;
-  margin-top: 1em;
   width: 100%;
   border: 1px solid var(--text-color); /* Переменные в base.css */
   list-style: none;
